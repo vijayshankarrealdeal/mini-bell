@@ -21,4 +21,4 @@ api.add_resource(GetDetailStatus,"/moreflightstatus/<string:link>")
 api.add_resource(HotelApi,"/gethotel/<int:checkin_day>/<int:checkin_month>/<int:checkin_year>/<int:checkout_day>/<int:checkout_month>/<int:checkout_year>")
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

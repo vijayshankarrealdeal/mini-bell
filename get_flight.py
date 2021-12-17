@@ -6,6 +6,7 @@ from flask_restful import Resource
 from flask import  jsonify
 import pandas as pd
 
+import os
 
 def get_flights(orgin, destination, date, adults, children, infants):
     date = date.split('-')
@@ -13,11 +14,14 @@ def get_flights(orgin, destination, date, adults, children, infants):
     date = ''.join(date)
     url = f"https://www.ixigo.com/search/result/flight?from={orgin.upper()}&to={destination.upper()}&date={date}&returnDate=&adults={adults}&children={children}&infants={infants}&class=e&source=Search%20Form"
     print(url)
-    options = ChromeOptions()
-    prefs = {"profile.default_content_setting_values.notifications" : 2}
-    options.add_experimental_option("prefs",prefs)
+    options = webdriver.ChromeOptions()
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    options.add_argument("--headless")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
     options.add_argument('--headless')
-    driver = webdriver.Chrome('chromedriver.exe',options=options)
+    driver = webdriver.Chrome(
+        executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
     driver.maximize_window()
     driver.get(url)
     sleep(2)

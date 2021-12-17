@@ -3,7 +3,7 @@ from flask_restful import Resource
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions
 import pandas as pd
-
+import  os
 
 def get_details(link):
     options = ChromeOptions()
@@ -17,9 +17,14 @@ def get_details(link):
 
 
 def get_board():
-    options = ChromeOptions()
+    options = webdriver.ChromeOptions()
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    options.add_argument("--headless")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
     options.add_argument('--headless')
-    driver = webdriver.Chrome('chromedriver.exe',options=options)
+    driver = webdriver.Chrome(
+        executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
     driver.maximize_window()
     driver.get('https://www.bangaloreairport.com/kempegowda-departures')
     items = driver.find_elements_by_xpath('.//div[@class = "flight-row"]')
